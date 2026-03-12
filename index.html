@@ -11,8 +11,7 @@ body, html {
   margin: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: black;
-  /* MOVED BACK HERE: Keeps the page from scrolling without breaking Safari 3D */
-  overflow: hidden; 
+  overflow: hidden; /* Keeps the page locked */
 }
 
 .bg {
@@ -23,20 +22,18 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
   
-  /* REMOVED overflow: hidden from here! */
-  
   -webkit-perspective: 800px;
   perspective: 800px; 
   
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* CSS GRID FIX: Replaces Flexbox for bulletproof centering */
+  display: grid;
+  place-items: center;
 }
 
 .tunnel {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  /* CSS GRID FIX: Allows children to stack perfectly */
+  display: grid;
+  place-items: center;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   -webkit-animation: breathe 8s infinite alternate ease-in-out;
@@ -44,50 +41,49 @@ body, html {
 }
 
 .tunnel span {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  /* We will fake the blend mode using RGBA opacity instead */
-  color: rgba(255, 192, 203, 0.8); 
+  /* CSS GRID FIX: Stacks all 5 spans directly on top of each other without position: absolute */
+  grid-area: 1 / 1; 
+  
+  color: #ffb6c1; /* Soft pink base */
   font-weight: 900;
   font-size: clamp(50px, 18vw, 150px); 
   letter-spacing: 1vw; 
   text-transform: uppercase;
   white-space: nowrap;
   
-  /* REMOVE OR COMMENT OUT THIS LINE: */
-  /* mix-blend-mode: screen; */ 
+  /* A baseline soft glow for the background layers */
+  text-shadow: 0 0 15px rgba(255, 192, 203, 0.4);
 }
 
-/* Added explicit -webkit-transforms to ensure iOS pushes the text back in 3D space */
+/* Because we used CSS grid, we REMOVED translate(-50%, -50%). Safari will love this. */
 .tunnel span:nth-child(1) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-1200px);
-  transform: translate(-50%, -50%) translateZ(-1200px); 
+  -webkit-transform: translateZ(-1200px);
+  transform: translateZ(-1200px); 
   opacity: 0.1; filter: blur(12px); 
 }
 .tunnel span:nth-child(2) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-800px);
-  transform: translate(-50%, -50%) translateZ(-800px); 
+  -webkit-transform: translateZ(-800px);
+  transform: translateZ(-800px); 
   opacity: 0.3; filter: blur(8px); 
 }
 .tunnel span:nth-child(3) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-400px);
-  transform: translate(-50%, -50%) translateZ(-400px); 
+  -webkit-transform: translateZ(-400px);
+  transform: translateZ(-400px); 
   opacity: 0.5; filter: blur(4px); 
 }
 .tunnel span:nth-child(4) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-150px);
-  transform: translate(-50%, -50%) translateZ(-150px); 
+  -webkit-transform: translateZ(-150px);
+  transform: translateZ(-150px); 
   opacity: 0.8; filter: blur(1px); 
 }
 .tunnel span:nth-child(5) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(0px);
-  transform: translate(-50%, -50%) translateZ(0px); 
+  -webkit-transform: translateZ(0px);
+  transform: translateZ(0px); 
   opacity: 1; 
-  text-shadow: 0 0 25px rgba(255, 192, 203, 0.8); 
+  /* GLOW FIX: Intense, multi-layered text-shadow to replace blend-mode */
+  text-shadow: 0 0 10px #ffb6c1, 0 0 30px #ff69b4, 0 0 60px #ff1493; 
 }
 
-/* Prefixed keyframes for flawless iOS animation */
 @-webkit-keyframes breathe {
   0% { -webkit-transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
   100% { -webkit-transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
@@ -97,7 +93,6 @@ body, html {
   0% { transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
   100% { transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
 }
-
 </style>
 </head>
 <body>
