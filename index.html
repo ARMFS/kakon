@@ -9,7 +9,9 @@
 body, html {
   height: 100%;
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  overflow: hidden;
+  background-color: black; /* Fills in any edges */
 }
 
 .bg {
@@ -19,55 +21,83 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
   
+  /* This creates the 3D camera lens for the entire page */
+  perspective: 800px; 
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.hello {
-  display: flex;
-  flex-direction: column; 
-  align-items: center;    
-  color: pink;
-  line-height: 0.85;      
-  margin: 0;
-  font-weight: bold;
+.tunnel {
+  position: relative;
+  /* This tells the container to respect the 3D space */
+  transform-style: preserve-3d;
+  /* A slow, creeping animation that moves the whole stack */
+  animation: breathe 8s infinite alternate ease-in-out;
 }
 
-/* The sizing stays exactly the same. 
-  The SVG in the first span will use this font-size to set its height! 
-*/
-.hello span:nth-child(1) { font-size: clamp(20px, 4vw, 50px); }   /* Electric Symbol */
-.hello span:nth-child(2) { font-size: clamp(40px, 8vw, 100px); }  /* A */
-.hello span:nth-child(3) { font-size: clamp(60px, 14vw, 170px); } /* K */
-.hello span:nth-child(4) { font-size: clamp(80px, 22vw, 250px); } /* O */
-.hello span:nth-child(5) { font-size: clamp(100px, 32vw, 350px); } /* N */
+/* Base styling for every layer */
+.tunnel span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: pink;
+  font-weight: 900;
+  letter-spacing: 2vw; /* Stretches the letters wide */
+  text-transform: uppercase;
+  white-space: nowrap;
+  mix-blend-mode: screen; /* Makes the pinks glow brightly when they overlap */
+}
 
-/* Makes sure the SVG acts exactly like a letter of text */
-.electric-icon {
-  height: 1em; /* 1em means "make this exactly the height of the font-size" */
-  width: auto;
-  fill: currentColor; /* Forces it to use your pink color */
-  display: block;
+/* Pushing each word deeper into the Z-axis (into the screen) 
+   and blurring the ones furthest away! */
+.tunnel span:nth-child(1) { 
+  font-size: 20vw; 
+  transform: translate(-50%, -50%) translateZ(-3000px); 
+  opacity: 0.1; 
+  filter: blur(12px); 
+}
+.tunnel span:nth-child(2) { 
+  font-size: 20vw; 
+  transform: translate(-50%, -50%) translateZ(-2000px); 
+  opacity: 0.2; 
+  filter: blur(8px); 
+}
+.tunnel span:nth-child(3) { 
+  font-size: 20vw; 
+  transform: translate(-50%, -50%) translateZ(-1000px); 
+  opacity: 0.4; 
+  filter: blur(4px); 
+}
+.tunnel span:nth-child(4) { 
+  font-size: 20vw; 
+  transform: translate(-50%, -50%) translateZ(-500px); 
+  opacity: 0.7; 
+  filter: blur(1px); 
+}
+.tunnel span:nth-child(5) { 
+  font-size: 22vw; 
+  transform: translate(-50%, -50%) translateZ(0px); 
+  opacity: 1; 
+  text-shadow: 0 0 30px rgba(255, 192, 203, 0.6); /* Gives the front word a heavy neon glow */
+}
+
+/* The magic animation: smoothly pans the camera slightly left/right and zooms in/out */
+@keyframes breathe {
+  0% { transform: translateZ(-300px) rotateX(2deg) rotateY(-4deg); }
+  100% { transform: translateZ(200px) rotateX(-2deg) rotateY(4deg); }
 }
 
 </style>
 </head>
 <body>
  <div class="bg">
-  <div class="hello">
-    
-    <span>
-      <svg class="electric-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M13 2L3 14h7v8l11-12h-7l4-8z"/>
-      </svg>
-    </span>
-    
-    <span>A</span>
-    <span>K</span>
-    <span>O</span>
-    <span>N</span>
-    
+  <div class="tunnel">
+    <span>KAKON</span>
+    <span>KAKON</span>
+    <span>KAKON</span>
+    <span>KAKON</span>
+    <span>KAKON</span>
   </div>
 </div>
 </body>
