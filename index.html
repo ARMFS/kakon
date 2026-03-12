@@ -10,6 +10,7 @@ body, html {
   height: 100%;
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden; /* Added this so the top words don't create a scrollbar if they go off-screen */
 }
 
 .bg {
@@ -19,44 +20,66 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
   
-  /* Centers the whole stack perfectly on the screen */
+  /* This centers our main anchor perfectly in the middle of the screen */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.hello {
-  display: flex;
-  flex-direction: column; /* Stacks the words vertically */
-  align-items: center;    /* Keeps them centered over each other */
+.center-anchor {
+  position: relative;
   color: pink;
-  line-height: 0.85;      /* Keeps the rows tucked closely together */
-  margin: 0;
   font-weight: bold;
+  line-height: 0.85;
+  text-align: center;
 }
 
-/* 7 rows total, growing progressively larger */
-.hello span:nth-child(1) { font-size: clamp(8px, 1.5vw, 14px); }  /* Row 1 - Tiniest */
-.hello span:nth-child(2) { font-size: clamp(12px, 2.5vw, 24px); } /* Row 2 */
-.hello span:nth-child(3) { font-size: clamp(16px, 4vw, 40px); }   /* Row 3 */
-.hello span:nth-child(4) { font-size: clamp(22px, 6vw, 70px); }   /* Row 4 */
-.hello span:nth-child(5) { font-size: clamp(32px, 9vw, 120px); }  /* Row 5 */
-.hello span:nth-child(6) { font-size: clamp(45px, 14vw, 200px); } /* Row 6 */
-.hello span:nth-child(7) { font-size: clamp(60px, 22vw, 300px); } /* Row 7 - Massive */
+/* The giant word that sits right in the center */
+.main-word {
+  font-size: clamp(60px, 22vw, 300px);
+  display: block;
+}
+
+/* The container for the smaller words */
+.stack-up {
+  position: absolute;
+  bottom: 75%; /* Pushes the small stack upwards, relative to the giant word */
+  left: 50%;
+  transform: translateX(-50%); /* Keeps the small text perfectly centered horizontally */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+}
+
+/* The 6 smaller rows, growing progressively larger */
+.stack-up span:nth-child(1) { font-size: clamp(8px, 1.5vw, 14px); }
+.stack-up span:nth-child(2) { font-size: clamp(12px, 2.5vw, 24px); }
+.stack-up span:nth-child(3) { font-size: clamp(16px, 4vw, 40px); }
+.stack-up span:nth-child(4) { font-size: clamp(22px, 6vw, 70px); }
+.stack-up span:nth-child(5) { font-size: clamp(32px, 9vw, 120px); }
+.stack-up span:nth-child(6) { font-size: clamp(45px, 14vw, 200px); }
 
 </style>
 </head>
 <body>
  <div class="bg">
-  <div class="hello">
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
+  
+  <div class="center-anchor">
+    
+    <div class="stack-up">
+      <span>KAKON</span>
+      <span>KAKON</span>
+      <span>KAKON</span>
+      <span>KAKON</span>
+      <span>KAKON</span>
+      <span>KAKON</span>
+    </div>
+
+    <span class="main-word">KAKON</span>
+    
   </div>
+
 </div>
 </body>
 </html>
