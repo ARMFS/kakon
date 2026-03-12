@@ -6,122 +6,107 @@
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <title>KAKON</title>
 <style>
-*, *::before, *::after { box-sizing: border-box; }
-
 body, html {
   height: 100%;
   margin: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: black;
-  overflow: hidden; 
-}
-
-.clip {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
 }
 
 .bg {
   background-image: url("/hello.gif");
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: scroll; 
+  overflow: hidden; 
   
   -webkit-perspective: 800px;
-  perspective: 800px;
+  perspective: 800px; 
   
-  /* CSS Grid perfectly centers everything so we don't need translate(-50%, -50%) */
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tunnel {
-  display: grid;
-  place-items: center;
+  position: relative;
+  /* Key for Safari 3D */
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
+  
   -webkit-animation: breathe 8s infinite alternate ease-in-out;
   animation: breathe 8s infinite alternate ease-in-out;
 }
 
 .tunnel span {
-  grid-area: 1 / 1; 
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: pink;
   font-weight: 900;
-  font-size: clamp(50px, 18vw, 150px);
-  letter-spacing: 1vw;
+  font-size: clamp(50px, 18vw, 150px); 
+  letter-spacing: 1vw; 
   text-transform: uppercase;
   white-space: nowrap;
+  mix-blend-mode: screen;
   
-  /* NO mix-blend-mode anywhere! */
+  /* Hardware acceleration for smoother blending */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
-/* THE NEON SIMULATION: 
-  Back layers are dark, transparent pinks with soft blurs.
-  The front layer is nearly white with massive, saturated pink drop-shadows.
-*/
-
+/* Added -webkit-transform to all child layers */
 .tunnel span:nth-child(1) { 
-  -webkit-transform: translateZ(-1200px); transform: translateZ(-1200px); 
-  color: rgba(255, 105, 180, 0.1); 
-  text-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
-  -webkit-filter: blur(12px); filter: blur(12px); 
+  -webkit-transform: translate(-50%, -50%) translateZ(-1200px);
+  transform: translate(-50%, -50%) translateZ(-1200px); 
+  opacity: 0.1; -webkit-filter: blur(12px); filter: blur(12px); 
 }
 .tunnel span:nth-child(2) { 
-  -webkit-transform: translateZ(-800px); transform: translateZ(-800px);  
-  color: rgba(255, 105, 180, 0.2); 
-  text-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
-  -webkit-filter: blur(8px); filter: blur(8px);  
+  -webkit-transform: translate(-50%, -50%) translateZ(-800px);
+  transform: translate(-50%, -50%) translateZ(-800px); 
+  opacity: 0.3; -webkit-filter: blur(8px); filter: blur(8px); 
 }
 .tunnel span:nth-child(3) { 
-  -webkit-transform: translateZ(-400px); transform: translateZ(-400px);  
-  color: rgba(255, 105, 180, 0.35); 
-  text-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
-  -webkit-filter: blur(4px); filter: blur(4px);  
+  -webkit-transform: translate(-50%, -50%) translateZ(-400px);
+  transform: translate(-50%, -50%) translateZ(-400px); 
+  opacity: 0.5; -webkit-filter: blur(4px); filter: blur(4px); 
 }
 .tunnel span:nth-child(4) { 
-  -webkit-transform: translateZ(-150px); transform: translateZ(-150px);  
-  color: rgba(255, 182, 193, 0.6); 
-  text-shadow: 0 0 5px rgba(255, 105, 180, 0.8);
-  -webkit-filter: blur(1px); filter: blur(1px);  
+  -webkit-transform: translate(-50%, -50%) translateZ(-150px);
+  transform: translate(-50%, -50%) translateZ(-150px); 
+  opacity: 0.8; -webkit-filter: blur(1px); filter: blur(1px); 
 }
 .tunnel span:nth-child(5) { 
-  -webkit-transform: translateZ(0px); transform: translateZ(0px); 
-  /* The Neon Core: Very pale, bright pink (almost white) */
-  color: #ffe6f0; 
-  /* The Neon Glow: Intense, stacked pink shadows */
-  text-shadow: 
-    0 0 10px #ff69b4, 
-    0 0 20px #ff1493, 
-    0 0 40px #ff1493, 
-    0 0 80px #ff007f;
+  -webkit-transform: translate(-50%, -50%) translateZ(0px);
+  transform: translate(-50%, -50%) translateZ(0px); 
+  opacity: 1; 
+  text-shadow: 0 0 25px rgba(255, 192, 203, 0.8); 
 }
 
+/* Prefixed keyframes for total Safari support */
 @-webkit-keyframes breathe {
-  0%   { -webkit-transform: translateZ(-200px) rotateX(2deg)  rotateY(-4deg); }
-  100% { -webkit-transform: translateZ(100px)  rotateX(-2deg) rotateY(4deg);  }
+  0% { -webkit-transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
+  100% { -webkit-transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
 }
 
 @keyframes breathe {
-  0%   { transform: translateZ(-200px) rotateX(2deg)  rotateY(-4deg); }
-  100% { transform: translateZ(100px)  rotateX(-2deg) rotateY(4deg);  }
+  0% { transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
+  100% { transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
 }
+
 </style>
 </head>
 <body>
-  <div class="clip">       
-    <div class="bg">
-      <div class="tunnel">
-        <span>KAKON</span>
-        <span>KAKON</span>
-        <span>KAKON</span>
-        <span>KAKON</span>
-        <span>KAKON</span>
-      </div>
-    </div>
+ <div class="bg">
+  <div class="tunnel">
+    <span>KAKON</span>
+    <span>KAKON</span>
+    <span>KAKON</span>
+    <span>KAKON</span>
+    <span>KAKON</span>
   </div>
+</div>
 </body>
 </html>
