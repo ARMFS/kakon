@@ -15,10 +15,9 @@ body, html {
   margin: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: black;
-  overflow: hidden; /* ← overflow stays HERE on body, NOT on the perspective container */
+  overflow: hidden; 
 }
 
-/* NEW: this outer wrapper clips content without touching perspective */
 .clip {
   position: fixed;
   inset: 0;
@@ -32,9 +31,7 @@ body, html {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: scroll; /* 'fixed' breaks on iOS — always use scroll */
-
-  /* NO overflow: hidden here — that's what was killing iOS 3D */
+  background-attachment: scroll; 
   
   -webkit-perspective: 800px;
   perspective: 800px;
@@ -48,8 +45,11 @@ body, html {
   position: relative;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
+  
+  /* Added webkit prefix for the animation */
+  -webkit-animation: breathe 8s infinite alternate ease-in-out;
   animation: breathe 8s infinite alternate ease-in-out;
-  /* Force GPU compositing on iOS */
+  
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   will-change: transform;
@@ -70,14 +70,38 @@ body, html {
   backface-visibility: hidden;
 }
 
-.tunnel span:nth-child(1) { transform: translate(-50%, -50%) translateZ(-1200px); opacity: 0.1; filter: blur(12px); }
-.tunnel span:nth-child(2) { transform: translate(-50%, -50%) translateZ(-800px);  opacity: 0.3; filter: blur(8px);  }
-.tunnel span:nth-child(3) { transform: translate(-50%, -50%) translateZ(-400px);  opacity: 0.5; filter: blur(4px);  }
-.tunnel span:nth-child(4) { transform: translate(-50%, -50%) translateZ(-150px);  opacity: 0.8; filter: blur(1px);  }
+/* Added explicit -webkit-transform prefixes for iOS */
+.tunnel span:nth-child(1) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(-1200px);
+  transform: translate(-50%, -50%) translateZ(-1200px); 
+  opacity: 0.1; -webkit-filter: blur(12px); filter: blur(12px); 
+}
+.tunnel span:nth-child(2) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(-800px);
+  transform: translate(-50%, -50%) translateZ(-800px);  
+  opacity: 0.3; -webkit-filter: blur(8px); filter: blur(8px);  
+}
+.tunnel span:nth-child(3) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(-400px);
+  transform: translate(-50%, -50%) translateZ(-400px);  
+  opacity: 0.5; -webkit-filter: blur(4px); filter: blur(4px);  
+}
+.tunnel span:nth-child(4) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(-150px);
+  transform: translate(-50%, -50%) translateZ(-150px);  
+  opacity: 0.8; -webkit-filter: blur(1px); filter: blur(1px);  
+}
 .tunnel span:nth-child(5) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(0px);
   transform: translate(-50%, -50%) translateZ(0px); 
   opacity: 1; 
   text-shadow: 0 0 25px rgba(255, 192, 203, 0.8); 
+}
+
+/* Added prefixed keyframes for iOS */
+@-webkit-keyframes breathe {
+  0%   { -webkit-transform: translateZ(-200px) rotateX(2deg)  rotateY(-4deg); }
+  100% { -webkit-transform: translateZ(100px)  rotateX(-2deg) rotateY(4deg);  }
 }
 
 @keyframes breathe {
@@ -87,7 +111,7 @@ body, html {
 </style>
 </head>
 <body>
-  <div class="clip">       <!-- clips without breaking 3D -->
+  <div class="clip">       
     <div class="bg">
       <div class="tunnel">
         <span>KAKON</span>
