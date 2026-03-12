@@ -11,21 +11,20 @@ body, html {
   margin: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: black;
-  /* REMOVED overflow: hidden from here to fix the Safari 3D bug! */
+  /* MOVED BACK HERE: Keeps the page from scrolling without breaking Safari 3D */
+  overflow: hidden; 
 }
 
 .bg {
   background-image: url("/hello.gif");
-  height: 100vh; /* Locks the height to the screen size */
+  height: 100vh; 
   width: 100vw;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   
-  /* Moved overflow here so it doesn't break iOS 3D */
-  overflow: hidden; 
+  /* REMOVED overflow: hidden from here! */
   
-  /* Camera lens, added -webkit- for iPhones */
   -webkit-perspective: 800px;
   perspective: 800px; 
   
@@ -36,9 +35,10 @@ body, html {
 
 .tunnel {
   position: relative;
-  /* Added -webkit- prefix to force 3D on Apple devices */
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
+  /* Prefixed animation for iOS */
+  -webkit-animation: breathe 8s infinite alternate ease-in-out;
   animation: breathe 8s infinite alternate ease-in-out;
 }
 
@@ -48,7 +48,6 @@ body, html {
   left: 50%;
   color: pink;
   font-weight: 900;
-  /* Switched to clamp() so the text scales nicely on both phone and desktop */
   font-size: clamp(50px, 18vw, 150px); 
   letter-spacing: 1vw; 
   text-transform: uppercase;
@@ -56,32 +55,40 @@ body, html {
   mix-blend-mode: screen;
 }
 
-/* Tuned the Z-axis depths (-1200px max) so it fits beautifully 
-  inside a mobile screen without looking smashed.
-*/
+/* Added explicit -webkit-transforms to ensure iOS pushes the text back in 3D space */
 .tunnel span:nth-child(1) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(-1200px);
   transform: translate(-50%, -50%) translateZ(-1200px); 
   opacity: 0.1; filter: blur(12px); 
 }
 .tunnel span:nth-child(2) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(-800px);
   transform: translate(-50%, -50%) translateZ(-800px); 
   opacity: 0.3; filter: blur(8px); 
 }
 .tunnel span:nth-child(3) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(-400px);
   transform: translate(-50%, -50%) translateZ(-400px); 
   opacity: 0.5; filter: blur(4px); 
 }
 .tunnel span:nth-child(4) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(-150px);
   transform: translate(-50%, -50%) translateZ(-150px); 
   opacity: 0.8; filter: blur(1px); 
 }
 .tunnel span:nth-child(5) { 
+  -webkit-transform: translate(-50%, -50%) translateZ(0px);
   transform: translate(-50%, -50%) translateZ(0px); 
   opacity: 1; 
   text-shadow: 0 0 25px rgba(255, 192, 203, 0.8); 
 }
 
-/* Smoothed out the breathing animation for mobile viewing */
+/* Prefixed keyframes for flawless iOS animation */
+@-webkit-keyframes breathe {
+  0% { -webkit-transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
+  100% { -webkit-transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
+}
+
 @keyframes breathe {
   0% { transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
   100% { transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
