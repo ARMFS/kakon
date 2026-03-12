@@ -19,7 +19,6 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
   
-  /* Flexbox makes it super easy to center the whole stack perfectly */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,33 +26,48 @@ body, html {
 
 .hello {
   display: flex;
-  flex-direction: column; /* Stacks the letters vertically */
-  align-items: center;    /* Keeps the letters centered over each other */
+  flex-direction: column; 
+  align-items: center;    
   color: pink;
-  line-height: 0.85;      /* Tightens the vertical gap between the letters */
+  line-height: 0.85;      
   margin: 0;
   font-weight: bold;
 }
 
-/* Targeting each letter individually.
-  Using clamp() so they scale up/down smoothly based on screen size!
+/* The sizing stays exactly the same. 
+  The SVG in the first span will use this font-size to set its height! 
 */
-.hello span:nth-child(1) { font-size: clamp(20px, 4vw, 50px); }   /* K - Smallest */
+.hello span:nth-child(1) { font-size: clamp(20px, 4vw, 50px); }   /* Electric Symbol */
 .hello span:nth-child(2) { font-size: clamp(40px, 8vw, 100px); }  /* A */
 .hello span:nth-child(3) { font-size: clamp(60px, 14vw, 170px); } /* K */
 .hello span:nth-child(4) { font-size: clamp(80px, 22vw, 250px); } /* O */
-.hello span:nth-child(5) { font-size: clamp(100px, 32vw, 350px); } /* N - Biggest */
+.hello span:nth-child(5) { font-size: clamp(100px, 32vw, 350px); } /* N */
+
+/* Makes sure the SVG acts exactly like a letter of text */
+.electric-icon {
+  height: 1em; /* 1em means "make this exactly the height of the font-size" */
+  width: auto;
+  fill: currentColor; /* Forces it to use your pink color */
+  display: block;
+}
 
 </style>
 </head>
 <body>
  <div class="bg">
   <div class="hello">
-    <span>K</span>
+    
+    <span>
+      <svg class="electric-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13 2L3 14h7v8l11-12h-7l4-8z"/>
+      </svg>
+    </span>
+    
     <span>A</span>
     <span>K</span>
     <span>O</span>
     <span>N</span>
+    
   </div>
 </div>
 </body>
