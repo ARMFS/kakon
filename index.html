@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,12 +6,20 @@
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <title>KAKON</title>
 <style>
+*, *::before, *::after { box-sizing: border-box; }
+
 body, html {
   height: 100%;
   margin: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: black;
   overflow: hidden; 
+}
+
+.clip {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
 }
 
 .bg {
@@ -22,82 +29,99 @@ body, html {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: scroll; 
   
   -webkit-perspective: 800px;
   perspective: 800px;
   
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* CSS Grid perfectly centers everything so we don't need translate(-50%, -50%) */
+  display: grid;
+  place-items: center;
 }
 
 .tunnel {
-  position: relative;
-  width: 0; 
-  height: 0; 
+  display: grid;
+  place-items: center;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   -webkit-animation: breathe 8s infinite alternate ease-in-out;
   animation: breathe 8s infinite alternate ease-in-out;
 }
 
-/* THE FIX: These invisible wrappers handle ONLY the 3D depth */
-.layer {
-  position: absolute;
-  top: 0; 
-  left: 0;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-}
-
-/* THE FIX: The spans handle ONLY the text, centering, and the blend-mode */
-.layer span {
-  display: block;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  
-  color: pink; 
+.tunnel span {
+  grid-area: 1 / 1; 
   font-weight: 900;
   font-size: clamp(50px, 18vw, 150px);
   letter-spacing: 1vw;
   text-transform: uppercase;
   white-space: nowrap;
   
-  /* YOUR NEON/WATER EFFECT IS BACK */
-  mix-blend-mode: screen; 
+  /* NO mix-blend-mode anywhere! */
 }
 
-/* We moved the translateZ depths to the wrapper classes */
-.l1 { -webkit-transform: translateZ(-1200px); transform: translateZ(-1200px); opacity: 0.1; -webkit-filter: blur(12px); filter: blur(12px); }
-.l2 { -webkit-transform: translateZ(-800px); transform: translateZ(-800px); opacity: 0.3; -webkit-filter: blur(8px); filter: blur(8px); }
-.l3 { -webkit-transform: translateZ(-400px); transform: translateZ(-400px); opacity: 0.5; -webkit-filter: blur(4px); filter: blur(4px); }
-.l4 { -webkit-transform: translateZ(-150px); transform: translateZ(-150px); opacity: 0.8; -webkit-filter: blur(1px); filter: blur(1px); }
-.l5 { -webkit-transform: translateZ(0px); transform: translateZ(0px); opacity: 1; }
+/* THE NEON SIMULATION: 
+  Back layers are dark, transparent pinks with soft blurs.
+  The front layer is nearly white with massive, saturated pink drop-shadows.
+*/
 
-.l5 span {
-  text-shadow: 0 0 25px rgba(255, 192, 203, 0.8);
+.tunnel span:nth-child(1) { 
+  -webkit-transform: translateZ(-1200px); transform: translateZ(-1200px); 
+  color: rgba(255, 105, 180, 0.1); 
+  text-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
+  -webkit-filter: blur(12px); filter: blur(12px); 
+}
+.tunnel span:nth-child(2) { 
+  -webkit-transform: translateZ(-800px); transform: translateZ(-800px);  
+  color: rgba(255, 105, 180, 0.2); 
+  text-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+  -webkit-filter: blur(8px); filter: blur(8px);  
+}
+.tunnel span:nth-child(3) { 
+  -webkit-transform: translateZ(-400px); transform: translateZ(-400px);  
+  color: rgba(255, 105, 180, 0.35); 
+  text-shadow: 0 0 10px rgba(255, 105, 180, 0.6);
+  -webkit-filter: blur(4px); filter: blur(4px);  
+}
+.tunnel span:nth-child(4) { 
+  -webkit-transform: translateZ(-150px); transform: translateZ(-150px);  
+  color: rgba(255, 182, 193, 0.6); 
+  text-shadow: 0 0 5px rgba(255, 105, 180, 0.8);
+  -webkit-filter: blur(1px); filter: blur(1px);  
+}
+.tunnel span:nth-child(5) { 
+  -webkit-transform: translateZ(0px); transform: translateZ(0px); 
+  /* The Neon Core: Very pale, bright pink (almost white) */
+  color: #ffe6f0; 
+  /* The Neon Glow: Intense, stacked pink shadows */
+  text-shadow: 
+    0 0 10px #ff69b4, 
+    0 0 20px #ff1493, 
+    0 0 40px #ff1493, 
+    0 0 80px #ff007f;
 }
 
 @-webkit-keyframes breathe {
-  0%   { -webkit-transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
-  100% { -webkit-transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
+  0%   { -webkit-transform: translateZ(-200px) rotateX(2deg)  rotateY(-4deg); }
+  100% { -webkit-transform: translateZ(100px)  rotateX(-2deg) rotateY(4deg);  }
 }
 
 @keyframes breathe {
-  0%   { transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
-  100% { transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
+  0%   { transform: translateZ(-200px) rotateX(2deg)  rotateY(-4deg); }
+  100% { transform: translateZ(100px)  rotateX(-2deg) rotateY(4deg);  }
 }
 </style>
 </head>
 <body>
- <div class="bg">
-  <div class="tunnel">
-    <div class="layer l1"><span>KAKON</span></div>
-    <div class="layer l2"><span>KAKON</span></div>
-    <div class="layer l3"><span>KAKON</span></div>
-    <div class="layer l4"><span>KAKON</span></div>
-    <div class="layer l5"><span>KAKON</span></div>
+  <div class="clip">       
+    <div class="bg">
+      <div class="tunnel">
+        <span>KAKON</span>
+        <span>KAKON</span>
+        <span>KAKON</span>
+        <span>KAKON</span>
+        <span>KAKON</span>
+      </div>
+    </div>
   </div>
-</div>
 </body>
 </html>
