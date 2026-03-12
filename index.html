@@ -32,59 +32,49 @@ body, html {
 
 .tunnel {
   position: relative;
-  /* This prevents the "offset" bug on mobile by giving flexbox a perfect dead-center anchor */
   width: 0; 
   height: 0; 
-  
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   -webkit-animation: breathe 8s infinite alternate ease-in-out;
   animation: breathe 8s infinite alternate ease-in-out;
 }
 
-.tunnel span {
+/* THE FIX: These invisible wrappers handle ONLY the 3D depth */
+.layer {
   position: absolute;
-  top: 50%; 
-  left: 50%;
+  top: 0; 
+  left: 0;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+/* THE FIX: The spans handle ONLY the text, centering, and the blend-mode */
+.layer span {
+  display: block;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
   
-  /* THE SECRET SAUCE: Using semi-transparent RGBA instead of mix-blend-mode.
-     This lets the layers ghost through each other to fake the 'screen' look! */
-  color: rgba(255, 192, 203, 0.55); 
-  
+  color: pink; 
   font-weight: 900;
   font-size: clamp(50px, 18vw, 150px);
   letter-spacing: 1vw;
   text-transform: uppercase;
   white-space: nowrap;
+  
+  /* YOUR NEON/WATER EFFECT IS BACK */
+  mix-blend-mode: screen; 
 }
 
-.tunnel span:nth-child(1) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-1200px);
-  transform: translate(-50%, -50%) translateZ(-1200px); 
-  opacity: 0.15; -webkit-filter: blur(12px); filter: blur(12px); 
-}
-.tunnel span:nth-child(2) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-800px);
-  transform: translate(-50%, -50%) translateZ(-800px); 
-  opacity: 0.35; -webkit-filter: blur(8px); filter: blur(8px); 
-}
-.tunnel span:nth-child(3) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-400px);
-  transform: translate(-50%, -50%) translateZ(-400px); 
-  opacity: 0.55; -webkit-filter: blur(4px); filter: blur(4px); 
-}
-.tunnel span:nth-child(4) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-150px);
-  transform: translate(-50%, -50%) translateZ(-150px); 
-  opacity: 0.8; -webkit-filter: blur(1px); filter: blur(1px); 
-}
-.tunnel span:nth-child(5) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(0px);
-  transform: translate(-50%, -50%) translateZ(0px); 
-  opacity: 1; 
-  /* Make the absolute front layer a bit more solid and give it a neon blast */
-  color: rgba(255, 192, 203, 0.9);
-  text-shadow: 0 0 15px rgba(255, 105, 180, 0.8), 0 0 30px rgba(255, 20, 147, 0.5); 
+/* We moved the translateZ depths to the wrapper classes */
+.l1 { -webkit-transform: translateZ(-1200px); transform: translateZ(-1200px); opacity: 0.1; -webkit-filter: blur(12px); filter: blur(12px); }
+.l2 { -webkit-transform: translateZ(-800px); transform: translateZ(-800px); opacity: 0.3; -webkit-filter: blur(8px); filter: blur(8px); }
+.l3 { -webkit-transform: translateZ(-400px); transform: translateZ(-400px); opacity: 0.5; -webkit-filter: blur(4px); filter: blur(4px); }
+.l4 { -webkit-transform: translateZ(-150px); transform: translateZ(-150px); opacity: 0.8; -webkit-filter: blur(1px); filter: blur(1px); }
+.l5 { -webkit-transform: translateZ(0px); transform: translateZ(0px); opacity: 1; }
+
+.l5 span {
+  text-shadow: 0 0 25px rgba(255, 192, 203, 0.8);
 }
 
 @-webkit-keyframes breathe {
@@ -101,11 +91,11 @@ body, html {
 <body>
  <div class="bg">
   <div class="tunnel">
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
+    <div class="layer l1"><span>KAKON</span></div>
+    <div class="layer l2"><span>KAKON</span></div>
+    <div class="layer l3"><span>KAKON</span></div>
+    <div class="layer l4"><span>KAKON</span></div>
+    <div class="layer l5"><span>KAKON</span></div>
   </div>
 </div>
 </body>
