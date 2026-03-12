@@ -10,7 +10,7 @@ body, html {
   height: 100%;
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  overflow: hidden; /* Added this so the top words don't create a scrollbar if they go off-screen */
+  overflow: hidden; /* Prevents a scrollbar from appearing if the tiny text hits the top */
 }
 
 .bg {
@@ -20,7 +20,7 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
   
-  /* This centers our main anchor perfectly in the middle of the screen */
+  /* Centers our main anchor perfectly */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,8 +30,9 @@ body, html {
   position: relative;
   color: pink;
   font-weight: bold;
-  line-height: 0.85;
   text-align: center;
+  /* Loosened this up from 0.85 to 0.95 to stop the awkward blending */
+  line-height: 0.95; 
 }
 
 /* The giant word that sits right in the center */
@@ -40,25 +41,28 @@ body, html {
   display: block;
 }
 
-/* The container for the smaller words */
+/* The container for the smaller words shooting up */
 .stack-up {
   position: absolute;
-  bottom: 75%; /* Pushes the small stack upwards, relative to the giant word */
+  /* Starts just above the giant word */
+  bottom: 95%; 
   left: 50%;
-  transform: translateX(-50%); /* Keeps the small text perfectly centered horizontally */
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100vw;
 }
 
-/* The 6 smaller rows, growing progressively larger */
-.stack-up span:nth-child(1) { font-size: clamp(8px, 1.5vw, 14px); }
-.stack-up span:nth-child(2) { font-size: clamp(12px, 2.5vw, 24px); }
-.stack-up span:nth-child(3) { font-size: clamp(16px, 4vw, 40px); }
-.stack-up span:nth-child(4) { font-size: clamp(22px, 6vw, 70px); }
-.stack-up span:nth-child(5) { font-size: clamp(32px, 9vw, 120px); }
-.stack-up span:nth-child(6) { font-size: clamp(45px, 14vw, 200px); }
+/* 7 smaller rows now, making it taller. 
+   Using margin-bottom to increase the gap as the text gets bigger! */
+.stack-up span:nth-child(1) { font-size: clamp(8px, 1.2vw, 12px); margin-bottom: 2px; }
+.stack-up span:nth-child(2) { font-size: clamp(12px, 2vw, 20px); margin-bottom: 4px; }
+.stack-up span:nth-child(3) { font-size: clamp(18px, 3.5vw, 35px); margin-bottom: 6px; }
+.stack-up span:nth-child(4) { font-size: clamp(26px, 5.5vw, 60px); margin-bottom: 10px; }
+.stack-up span:nth-child(5) { font-size: clamp(38px, 8vw, 95px); margin-bottom: 15px; }
+.stack-up span:nth-child(6) { font-size: clamp(52px, 12vw, 140px); margin-bottom: 20px; }
+.stack-up span:nth-child(7) { font-size: clamp(68px, 17vw, 200px); margin-bottom: 25px; }
 
 </style>
 </head>
@@ -68,6 +72,7 @@ body, html {
   <div class="center-anchor">
     
     <div class="stack-up">
+      <span>KAKON</span>
       <span>KAKON</span>
       <span>KAKON</span>
       <span>KAKON</span>
