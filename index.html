@@ -6,27 +6,38 @@
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 <title>KAKON</title>
 <style>
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body, html {
   height: 100%;
   margin: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: black;
-  /* MOVED BACK HERE: Keeps the page from scrolling without breaking Safari 3D */
-  overflow: hidden; 
+  overflow: hidden; /* ← overflow stays HERE on body, NOT on the perspective container */
+}
+
+/* NEW: this outer wrapper clips content without touching perspective */
+.clip {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
 }
 
 .bg {
   background-image: url("/hello.gif");
-  height: 100vh; 
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  
-  /* REMOVED overflow: hidden from here! */
+  background-attachment: scroll; /* 'fixed' breaks on iOS — always use scroll */
+
+  /* NO overflow: hidden here — that's what was killing iOS 3D */
   
   -webkit-perspective: 800px;
-  perspective: 800px; 
+  perspective: 800px;
   
   display: flex;
   justify-content: center;
@@ -37,9 +48,11 @@ body, html {
   position: relative;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  /* Prefixed animation for iOS */
-  -webkit-animation: breathe 8s infinite alternate ease-in-out;
   animation: breathe 8s infinite alternate ease-in-out;
+  /* Force GPU compositing on iOS */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 .tunnel span {
@@ -48,63 +61,42 @@ body, html {
   left: 50%;
   color: pink;
   font-weight: 900;
-  font-size: clamp(50px, 18vw, 150px); 
-  letter-spacing: 1vw; 
+  font-size: clamp(40px, 15vw, 150px);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
   mix-blend-mode: screen;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
-/* Added explicit -webkit-transforms to ensure iOS pushes the text back in 3D space */
-.tunnel span:nth-child(1) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-1200px);
-  transform: translate(-50%, -50%) translateZ(-1200px); 
-  opacity: 0.1; filter: blur(12px); 
-}
-.tunnel span:nth-child(2) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-800px);
-  transform: translate(-50%, -50%) translateZ(-800px); 
-  opacity: 0.3; filter: blur(8px); 
-}
-.tunnel span:nth-child(3) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-400px);
-  transform: translate(-50%, -50%) translateZ(-400px); 
-  opacity: 0.5; filter: blur(4px); 
-}
-.tunnel span:nth-child(4) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(-150px);
-  transform: translate(-50%, -50%) translateZ(-150px); 
-  opacity: 0.8; filter: blur(1px); 
-}
+.tunnel span:nth-child(1) { transform: translate(-50%, -50%) translateZ(-1200px); opacity: 0.1; filter: blur(12px); }
+.tunnel span:nth-child(2) { transform: translate(-50%, -50%) translateZ(-800px);  opacity: 0.3; filter: blur(8px);  }
+.tunnel span:nth-child(3) { transform: translate(-50%, -50%) translateZ(-400px);  opacity: 0.5; filter: blur(4px);  }
+.tunnel span:nth-child(4) { transform: translate(-50%, -50%) translateZ(-150px);  opacity: 0.8; filter: blur(1px);  }
 .tunnel span:nth-child(5) { 
-  -webkit-transform: translate(-50%, -50%) translateZ(0px);
   transform: translate(-50%, -50%) translateZ(0px); 
   opacity: 1; 
   text-shadow: 0 0 25px rgba(255, 192, 203, 0.8); 
 }
 
-/* Prefixed keyframes for flawless iOS animation */
-@-webkit-keyframes breathe {
-  0% { -webkit-transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
-  100% { -webkit-transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
-}
-
 @keyframes breathe {
-  0% { transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
-  100% { transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
+  0%   { transform: translateZ(-200px) rotateX(2deg)  rotateY(-4deg); }
+  100% { transform: translateZ(100px)  rotateX(-2deg) rotateY(4deg);  }
 }
-
 </style>
 </head>
 <body>
- <div class="bg">
-  <div class="tunnel">
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
-    <span>KAKON</span>
+  <div class="clip">       <!-- clips without breaking 3D -->
+    <div class="bg">
+      <div class="tunnel">
+        <span>KAKON</span>
+        <span>KAKON</span>
+        <span>KAKON</span>
+        <span>KAKON</span>
+        <span>KAKON</span>
+      </div>
+    </div>
   </div>
-</div>
 </body>
 </html>
