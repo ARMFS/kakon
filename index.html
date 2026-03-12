@@ -18,30 +18,42 @@ body, html {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  
+  /* Flexbox makes it super easy to center the whole stack perfectly */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .hello {
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column; /* Stacks the letters vertically */
+  align-items: center;    /* Keeps the letters centered over each other */
   color: pink;
-  width: 100%; /* Ensures the container spans the full screen width */
+  line-height: 0.85;      /* Tightens the vertical gap between the letters */
+  margin: 0;
+  font-weight: bold;
 }
 
-/* Added responsive styling for the heading */
-h1 {
-  margin: 0;
-  /* 18% of the screen width, but never shrink below 50px or grow above 300px */
-  font-size: clamp(50px, 18vw, 300px); 
-}
+/* Targeting each letter individually.
+  Using clamp() so they scale up/down smoothly based on screen size!
+*/
+.hello span:nth-child(1) { font-size: clamp(20px, 4vw, 50px); }   /* K - Smallest */
+.hello span:nth-child(2) { font-size: clamp(40px, 8vw, 100px); }  /* A */
+.hello span:nth-child(3) { font-size: clamp(60px, 14vw, 170px); } /* K */
+.hello span:nth-child(4) { font-size: clamp(80px, 22vw, 250px); } /* O */
+.hello span:nth-child(5) { font-size: clamp(100px, 32vw, 350px); } /* N - Biggest */
+
 </style>
 </head>
 <body>
  <div class="bg">
   <div class="hello">
-    <h1>KAKON</h1>
+    <span>K</span>
+    <span>A</span>
+    <span>K</span>
+    <span>O</span>
+    <span>N</span>
   </div>
 </div>
 </body>
