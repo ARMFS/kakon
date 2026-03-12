@@ -19,7 +19,7 @@ body, html {
   background-repeat: no-repeat;
   background-size: cover;
   
-  /* Flexbox makes it super easy to center the whole stack perfectly */
+  /* Centers the whole stack perfectly on the screen */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,33 +27,31 @@ body, html {
 
 .hello {
   display: flex;
-  flex-direction: column; /* Stacks the letters vertically */
-  align-items: center;    /* Keeps the letters centered over each other */
+  flex-direction: column; /* Stacks the words vertically */
+  align-items: center;    /* Keeps them centered over each other */
   color: pink;
-  line-height: 0.85;      /* Tightens the vertical gap between the letters */
+  line-height: 0.85;      /* Keeps the rows tucked closely together */
   margin: 0;
   font-weight: bold;
 }
 
-/* Targeting each letter individually.
-  Using clamp() so they scale up/down smoothly based on screen size!
+/* Targeting each row from top to bottom.
+  The clamp() function ensures they still shrink nicely on phones!
 */
-.hello span:nth-child(1) { font-size: clamp(20px, 4vw, 50px); }   /* K - Smallest */
-.hello span:nth-child(2) { font-size: clamp(40px, 8vw, 100px); }  /* A */
-.hello span:nth-child(3) { font-size: clamp(60px, 14vw, 170px); } /* K */
-.hello span:nth-child(4) { font-size: clamp(80px, 22vw, 250px); } /* O */
-.hello span:nth-child(5) { font-size: clamp(100px, 32vw, 350px); } /* N - Biggest */
+.hello span:nth-child(1) { font-size: clamp(20px, 5vw, 50px); }    /* Top row - Smallest */
+.hello span:nth-child(2) { font-size: clamp(35px, 10vw, 100px); }  /* Second row */
+.hello span:nth-child(3) { font-size: clamp(50px, 15vw, 180px); }  /* Third row */
+.hello span:nth-child(4) { font-size: clamp(65px, 22vw, 300px); }  /* Bottom row - Biggest */
 
 </style>
 </head>
 <body>
  <div class="bg">
   <div class="hello">
-    <span>K</span>
-    <span>A</span>
-    <span>K</span>
-    <span>O</span>
-    <span>N</span>
+    <span>KAKON</span>
+    <span>KAKON</span>
+    <span>KAKON</span>
+    <span>KAKON</span>
   </div>
 </div>
 </body>
