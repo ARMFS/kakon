@@ -10,19 +10,25 @@ body, html {
   height: 100%;
   margin: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  overflow: hidden;
-  background-color: black; /* Fills in any edges */
+  background-color: black;
+  /* REMOVED overflow: hidden from here to fix the Safari 3D bug! */
 }
 
 .bg {
   background-image: url("/hello.gif");
-  height: 100%; 
+  height: 100vh; /* Locks the height to the screen size */
+  width: 100vw;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   
-  /* This creates the 3D camera lens for the entire page */
+  /* Moved overflow here so it doesn't break iOS 3D */
+  overflow: hidden; 
+  
+  /* Camera lens, added -webkit- for iPhones */
+  -webkit-perspective: 800px;
   perspective: 800px; 
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,62 +36,55 @@ body, html {
 
 .tunnel {
   position: relative;
-  /* This tells the container to respect the 3D space */
+  /* Added -webkit- prefix to force 3D on Apple devices */
+  -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  /* A slow, creeping animation that moves the whole stack */
   animation: breathe 8s infinite alternate ease-in-out;
 }
 
-/* Base styling for every layer */
 .tunnel span {
   position: absolute;
   top: 50%;
   left: 50%;
   color: pink;
   font-weight: 900;
-  letter-spacing: 2vw; /* Stretches the letters wide */
+  /* Switched to clamp() so the text scales nicely on both phone and desktop */
+  font-size: clamp(50px, 18vw, 150px); 
+  letter-spacing: 1vw; 
   text-transform: uppercase;
   white-space: nowrap;
-  mix-blend-mode: screen; /* Makes the pinks glow brightly when they overlap */
+  mix-blend-mode: screen;
 }
 
-/* Pushing each word deeper into the Z-axis (into the screen) 
-   and blurring the ones furthest away! */
+/* Tuned the Z-axis depths (-1200px max) so it fits beautifully 
+  inside a mobile screen without looking smashed.
+*/
 .tunnel span:nth-child(1) { 
-  font-size: 20vw; 
-  transform: translate(-50%, -50%) translateZ(-3000px); 
-  opacity: 0.1; 
-  filter: blur(12px); 
+  transform: translate(-50%, -50%) translateZ(-1200px); 
+  opacity: 0.1; filter: blur(12px); 
 }
 .tunnel span:nth-child(2) { 
-  font-size: 20vw; 
-  transform: translate(-50%, -50%) translateZ(-2000px); 
-  opacity: 0.2; 
-  filter: blur(8px); 
+  transform: translate(-50%, -50%) translateZ(-800px); 
+  opacity: 0.3; filter: blur(8px); 
 }
 .tunnel span:nth-child(3) { 
-  font-size: 20vw; 
-  transform: translate(-50%, -50%) translateZ(-1000px); 
-  opacity: 0.4; 
-  filter: blur(4px); 
+  transform: translate(-50%, -50%) translateZ(-400px); 
+  opacity: 0.5; filter: blur(4px); 
 }
 .tunnel span:nth-child(4) { 
-  font-size: 20vw; 
-  transform: translate(-50%, -50%) translateZ(-500px); 
-  opacity: 0.7; 
-  filter: blur(1px); 
+  transform: translate(-50%, -50%) translateZ(-150px); 
+  opacity: 0.8; filter: blur(1px); 
 }
 .tunnel span:nth-child(5) { 
-  font-size: 22vw; 
   transform: translate(-50%, -50%) translateZ(0px); 
   opacity: 1; 
-  text-shadow: 0 0 30px rgba(255, 192, 203, 0.6); /* Gives the front word a heavy neon glow */
+  text-shadow: 0 0 25px rgba(255, 192, 203, 0.8); 
 }
 
-/* The magic animation: smoothly pans the camera slightly left/right and zooms in/out */
+/* Smoothed out the breathing animation for mobile viewing */
 @keyframes breathe {
-  0% { transform: translateZ(-300px) rotateX(2deg) rotateY(-4deg); }
-  100% { transform: translateZ(200px) rotateX(-2deg) rotateY(4deg); }
+  0% { transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
+  100% { transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
 }
 
 </style>
