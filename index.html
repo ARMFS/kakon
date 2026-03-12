@@ -11,72 +11,80 @@ body, html {
   margin: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: black;
-  overflow: hidden; /* Safe to put this back now! */
+  /* REMOVED overflow: hidden from here to fix the Safari 3D bug! */
 }
 
 .bg {
   background-image: url("/hello.gif");
-  height: 100vh; 
+  height: 100vh; /* Locks the height to the screen size */
   width: 100vw;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  
+  /* Moved overflow here so it doesn't break iOS 3D */
+  overflow: hidden; 
+  
+  /* Camera lens, added -webkit- for iPhones */
+  -webkit-perspective: 800px;
+  perspective: 800px; 
   
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* The breathing animation now uses bulletproof 2D scaling and rotation */
 .tunnel {
   position: relative;
-  width: 100%;
-  height: 100%;
-  animation: breathe 6s infinite alternate ease-in-out;
+  /* Added -webkit- prefix to force 3D on Apple devices */
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  animation: breathe 8s infinite alternate ease-in-out;
 }
 
 .tunnel span {
   position: absolute;
+  top: 50%;
   left: 50%;
-  /* Removed top: 50% from here so we can control it individually below */
   color: pink;
   font-weight: 900;
-  font-size: clamp(60px, 20vw, 150px); /* Massive base font size */
+  /* Switched to clamp() so the text scales nicely on both phone and desktop */
+  font-size: clamp(50px, 18vw, 150px); 
   letter-spacing: 1vw; 
   text-transform: uppercase;
   white-space: nowrap;
+  mix-blend-mode: screen;
 }
 
-/* THE BULLETPROOF TUNNEL FIX:
-  Instead of 3D depth, we scale the back words down and push them 
-  slightly higher on the screen so they peek out, creating a perfect fake 3D tunnel!
+/* Tuned the Z-axis depths (-1200px max) so it fits beautifully 
+  inside a mobile screen without looking smashed.
 */
 .tunnel span:nth-child(1) { 
-  transform: translate(-50%, -85%) scale(0.2); 
-  opacity: 0.15; filter: blur(8px); 
+  transform: translate(-50%, -50%) translateZ(-1200px); 
+  opacity: 0.1; filter: blur(12px); 
 }
 .tunnel span:nth-child(2) { 
-  transform: translate(-50%, -75%) scale(0.35); 
-  opacity: 0.3; filter: blur(5px); 
+  transform: translate(-50%, -50%) translateZ(-800px); 
+  opacity: 0.3; filter: blur(8px); 
 }
 .tunnel span:nth-child(3) { 
-  transform: translate(-50%, -65%) scale(0.55); 
-  opacity: 0.5; filter: blur(3px); 
+  transform: translate(-50%, -50%) translateZ(-400px); 
+  opacity: 0.5; filter: blur(4px); 
 }
 .tunnel span:nth-child(4) { 
-  transform: translate(-50%, -56%) scale(0.75); 
+  transform: translate(-50%, -50%) translateZ(-150px); 
   opacity: 0.8; filter: blur(1px); 
 }
 .tunnel span:nth-child(5) { 
-  transform: translate(-50%, -48%) scale(1); 
+  transform: translate(-50%, -50%) translateZ(0px); 
   opacity: 1; 
-  text-shadow: 0 0 25px rgba(255, 192, 203, 0.9); /* Heavy neon glow on the front word */
+  text-shadow: 0 0 25px rgba(255, 192, 203, 0.8); 
 }
 
-/* Faking the camera pan with simple 2D movements */
+/* Smoothed out the breathing animation for mobile viewing */
 @keyframes breathe {
-  0% { transform: scale(0.95) rotate(-1deg) translateY(1%); }
-  100% { transform: scale(1.05) rotate(1deg) translateY(-1%); }
+  0% { transform: translateZ(-200px) rotateX(2deg) rotateY(-4deg); }
+  100% { transform: translateZ(100px) rotateX(-2deg) rotateY(4deg); }
 }
 
 </style>
