@@ -1,68 +1,128 @@
-<style>
-body, html {
-  height: 100%;
-  margin: 0;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  background-color: black;
-  overflow: hidden;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <title>KAKON</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background-color: black;
+            overflow: hidden;
+        }
 
-.bg {
-  background-image: url("/hello.gif");
-  height: 100vh;
-  width: 100vw;
-  background-position: center;
-  background-size: cover;
-  display: grid; /* Switched to Grid for perfect stacking */
-  place-items: center; 
-  -webkit-perspective: 1000px;
-  perspective: 1000px;
-}
+        .bg {
+            background-image: url("/hello.gif");
+            height: 100vh;
+            width: 100vw;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            
+            /* Camera lens setup */
+            -webkit-perspective: 1000px;
+            perspective: 1000px; 
+            
+            display: grid;
+            place-items: center;
+        }
 
-.tunnel {
-  display: grid;
-  place-items: center;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-animation: breathe 8s infinite alternate ease-in-out;
-  animation: breathe 8s infinite alternate ease-in-out;
-}
+        .tunnel {
+            display: grid;
+            place-items: center;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            -webkit-animation: breathe 8s infinite alternate ease-in-out;
+            animation: breathe 8s infinite alternate ease-in-out;
+        }
 
-.tunnel span {
-  grid-area: 1 / 1; /* All layers share the exact same center spot */
-  color: pink;
-  font-weight: 900;
-  font-size: clamp(50px, 18vw, 150px);
-  letter-spacing: 1vw;
-  text-transform: uppercase;
-  white-space: nowrap;
-  mix-blend-mode: screen;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
+        .tunnel span {
+            /* This forces all layers to stack perfectly in the center */
+            grid-area: 1 / 1; 
+            
+            color: pink;
+            font-weight: 900;
+            font-size: clamp(50px, 18vw, 150px); 
+            letter-spacing: 1vw; 
+            text-transform: uppercase;
+            white-space: nowrap;
+            
+            /* The watery neon effect */
+            mix-blend-mode: screen; 
+            
+            /* Keeps things crisp on Retina displays */
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
 
-/* Depth Fixes for iOS */
-.tunnel span:nth-child(1) { -webkit-transform: translateZ(-1000px); transform: translateZ(-1000px); opacity: 0.1; -webkit-filter: blur(12px); filter: blur(12px); }
-.tunnel span:nth-child(2) { -webkit-transform: translateZ(-700px);  transform: translateZ(-700px);  opacity: 0.3; -webkit-filter: blur(8px);  filter: blur(8px);  }
-.tunnel span:nth-child(3) { -webkit-transform: translateZ(-400px);  transform: translateZ(-400px);  opacity: 0.5; -webkit-filter: blur(4px);  filter: blur(4px);  }
-.tunnel span:nth-child(4) { -webkit-transform: translateZ(-150px);  transform: translateZ(-150px);  opacity: 0.8; -webkit-filter: blur(1px);  filter: blur(1px);  }
+        /* 3D Depth Layers */
+        .tunnel span:nth-child(1) { 
+            -webkit-transform: translateZ(-1000px); 
+            transform: translateZ(-1000px); 
+            opacity: 0.1; 
+            -webkit-filter: blur(12px); 
+            filter: blur(12px); 
+        }
+        .tunnel span:nth-child(2) { 
+            -webkit-transform: translateZ(-700px); 
+            transform: translateZ(-700px); 
+            opacity: 0.3; 
+            -webkit-filter: blur(8px); 
+            filter: blur(8px); 
+        }
+        .tunnel span:nth-child(3) { 
+            -webkit-transform: translateZ(-400px); 
+            transform: translateZ(-400px); 
+            opacity: 0.5; 
+            -webkit-filter: blur(4px); 
+            filter: blur(4px); 
+        }
+        .tunnel span:nth-child(4) { 
+            -webkit-transform: translateZ(-150px); 
+            transform: translateZ(-150px); 
+            opacity: 0.8; 
+            -webkit-filter: blur(1px); 
+            filter: blur(1px); 
+        }
+        
+        /* The Front "Core" Layer */
+        .tunnel span:nth-child(5) { 
+            -webkit-transform: translateZ(0px); 
+            transform: translateZ(0px); 
+            color: #ffffff; /* White center for neon pop */
+            opacity: 1; 
+            text-shadow: 0 0 25px rgba(255, 192, 203, 0.9);
+        }
 
-/* Front White Layer - Forced to stay big and centered */
-.tunnel span:nth-child(5) { 
-  -webkit-transform: translateZ(0px); 
-  transform: translateZ(0px); 
-  color: #fff; /* White core makes the neon "pop" */
-  opacity: 1; 
-  text-shadow: 0 0 25px rgba(255, 192, 203, 0.9);
-}
+        /* Animation for the floating tunnel effect */
+        @-webkit-keyframes breathe {
+            0% { -webkit-transform: rotateX(4deg) rotateY(-8deg) translateZ(-100px); }
+            100% { -webkit-transform: rotateX(-4deg) rotateY(8deg) translateZ(100px); }
+        }
 
-@-webkit-keyframes breathe {
-  0% { -webkit-transform: rotateX(4deg) rotateY(-8deg) translateZ(-100px); }
-  100% { -webkit-transform: rotateX(-4deg) rotateY(8deg) translateZ(100px); }
-}
+        @keyframes breathe {
+            0% { transform: rotateX(4deg) rotateY(-8deg) translateZ(-100px); }
+            100% { transform: rotateX(-4deg) rotateY(8deg) translateZ(100px); }
+        }
+    </style>
+</head>
+<body>
 
-@keyframes breathe {
-  0% { transform: rotateX(4deg) rotateY(-8deg) translateZ(-100px); }
-  100% { transform: rotateX(-4deg) rotateY(8deg) translateZ(100px); }
-}
-</style>
+    <div class="bg">
+        <div class="tunnel">
+            <span>KAKON</span>
+            <span>KAKON</span>
+            <span>KAKON</span>
+            <span>KAKON</span>
+            <span>KAKON</span>
+        </div>
+    </div>
+
+</body>
+</html>
